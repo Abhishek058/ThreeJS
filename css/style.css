@@ -7,3 +7,15 @@ canvas {
   display: block;
 }
 
+h1 {
+  position: absolute;
+  top: 2em;
+  left: 4em;
+  text-transform: uppercase;
+  font-size: 7rem;
+  width: auto;
+  line-height: 0.8em;
+  color: #989898;
+  border: 5px solid lightblue;
+  padding: 0.2rem;
+}
