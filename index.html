@@ -34,6 +34,9 @@
         camera.updateProjectionMatrix();
       });
 
+      var raycaster = new THREE.Raycaster();
+      var mouse = new THREE.Vector2();
+
       var geometry = new THREE.BoxGeometry(1, 1, 1);
       var material = new THREE.MeshLambertMaterial({ color: 0xffcc00 });
       var mesh = new THREE.Mesh(geometry, material);
@@ -46,13 +49,42 @@
 
       var render = function () {
         requestAnimationFrame(render);
-        mesh.rotation.x += 0.03;
+        // mesh.rotation.x += 0.03;
         // mesh.scale.x += 0.003;
         // mesh.scale.y += 0.003;
         // mesh.scale.z += 0.003;
         renderer.render(scene, camera);
       };
+
+      function onMouseMove() {
+        event.preventDefault();
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = (event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFrontCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(scene.children, true);
+        for (var i = 0; i < intersects.length; i++) {
+          intersects[i].object.material.color.set(0xff0000);
+        }
+      }
+
       render();
+      this.tl = new TimelineMax().delay(0.3);
+      this.tl.to(this.mesh.scale, 1, { x: 2, ease: Expo.easeOut });
+      this.tl.to(this.mesh.scale, 0.5, { x: 0.5, ease: Expo.easeOut });
+      this.tl.to(this.mesh.position, 0.5, { x: 1, ease: Expo.easeOut });
+      this.tl.to(
+        this.mesh.rotation,
+        0.5,
+        {
+          y: Math.PI * 0.5,
+          ease: Expo.easeOut,
+        },
+        "=-1.5"
+      );
+
+      window.addEventListener("mousemove", onMouseMove);
     </script>
   </body>
 </html>
